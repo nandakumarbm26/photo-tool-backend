@@ -3,9 +3,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.transforms as transforms
-from PIL import Image
-
 from MODNet.src.models.modnet import MODNet
+from PIL import Image
 
 
 def combined_display(image, matte):
@@ -42,7 +41,7 @@ def bg_remover(image):
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
         ]
     )
-    ckpt_path=r"MODNet\pretrained\modnet_photographic_portrait_matting.ckpt"
+    ckpt_path=r"api\MODNet\pretrained\modnet_photographic_portrait_matting.ckpt"
     # create MODNet and load the pre-trained ckpt
     modnet = MODNet(backbone_pretrained=False)
     modnet = nn.DataParallel(modnet)

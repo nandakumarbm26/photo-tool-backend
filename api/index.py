@@ -2,15 +2,14 @@ import base64
 import copy
 import time
 
+import bgModule
 import cv2
 import numpy as np
+import utils
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from PIL import Image, ImageEnhance
 from rembg import remove
-
-import bgModule
-import utils
 
 app=Flask(__name__)
 CORS(app)
@@ -21,7 +20,7 @@ def helloWorld():
 
 @app.route("/download",methods=['GET'])
 def download():
-    return send_file(r'output.png')
+    return send_file(r'..\output.png')
 
 @app.route('/passport',methods=['POST'])
 def passport():
