@@ -1,12 +1,10 @@
 import base64
 import copy
-import os
 import time
 
 import cv2
 import numpy as np
-from flask import (Flask, jsonify, make_response, request, send_file,
-                   send_from_directory)
+from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from PIL import Image, ImageEnhance
 from rembg import remove
@@ -23,7 +21,7 @@ def helloWorld():
 
 @app.route("/download",methods=['GET'])
 def download():
-    return send_file(r'output.jpg')
+    return send_file(r'output.png')
 
 @app.route('/passport',methods=['POST'])
 def passport():
@@ -116,8 +114,8 @@ def passport():
         shadow=False
         if(light<0.3):
             shadow=True
-        cv2.imwrite("outputCache/"+str(fileName)+".jpg",i)
-
+        # cv2.imwrite("outputCache/"+str(fileName)+".jpg",i)
+        cv2.imwrite('output.png',i)
         return {"image":str(base64_bytes),"spectacles":specFlag,"shadow":shadow,"mouthopen":mouthOpen}
 
     except Exception as e:
