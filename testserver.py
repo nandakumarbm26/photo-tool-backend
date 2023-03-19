@@ -1,15 +1,19 @@
-import copy
-from flask import Flask,jsonify,request,make_response, send_file, send_from_directory
-from flask_cors import CORS
 import base64
-import numpy as np
-import cv2
-from PIL import Image,ImageEnhance
-from rembg import remove
-import  utils
+import copy
 import os
 import time
+
+import cv2
+import numpy as np
+from flask import (Flask, jsonify, make_response, request, send_file,
+                   send_from_directory)
+from flask_cors import CORS
+from PIL import Image, ImageEnhance
+from rembg import remove
+
 import bgModule
+import utils
+
 app=Flask(__name__)
 CORS(app)
 
@@ -32,8 +36,8 @@ def passport():
 
         f_jpg_as_np = np.frombuffer(face_jpg_original, dtype=np.uint8)
         frame = cv2.imdecode(f_jpg_as_np, flags=1)
-
         print("check2")
+
         cv2.imwrite("inputCache/"+str(fileName)+".jpg",frame)
         im = Image.fromarray(np.uint8(frame)).convert('RGBA')
         light=utils.calculate_brightness(im)
@@ -47,17 +51,17 @@ def passport():
         data=bgModule.bg_remover(data)
         img=cv2.cvtColor(np.array(data),cv2.COLOR_RGBA2BGRA)
 
-        dim=(800,int((800/img.shape[1])*img.shape[0]))
-        img = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-        img=utils.enhance(img)
-        print("enhance done")
+        # dim=(800,int((800/img.shape[1])*img.shape[0]))
+        # img = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+        # # img=utils.enhance(img)
+        # print("enhance done")
 
         print("image crop")
         dim=(800,int((800/img.shape[1])*img.shape[0]))
         img = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
         img=utils.cropImage(img)
 
-        
+
 
         # img=remove(img,alpha_matting=True)
         # cv2.imwrite('int.png',img)
@@ -65,7 +69,7 @@ def passport():
         # img=cv2.imread('out.png',cv2.IMREAD_UNCHANGED)
         # print("bg remove done")
 
-        
+
 
         # bg=Image.open('white.jpg')
         # print(bg.size)
