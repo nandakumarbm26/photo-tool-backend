@@ -1,3 +1,0 @@
-#!C:\Users\sw09\nkpy\photo-tool-backend\phototoll-env\Scripts\python.exe
-from numba.pycc import main
-main()
