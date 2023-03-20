@@ -2,14 +2,15 @@ import base64
 import copy
 import time
 
-import bgModule
 import cv2
 import numpy as np
-import utils
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from PIL import Image, ImageEnhance
 from rembg import remove
+
+import bgModule
+import utils
 
 app=Flask(__name__)
 CORS(app)
@@ -122,5 +123,5 @@ def passport():
 
 
 
-# if (__name__=="__main__"):
-#     app.run(port="3000")
+if (__name__=="__main__"):
+    app.run(port="3000")

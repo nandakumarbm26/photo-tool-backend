@@ -5,7 +5,7 @@ results/*
 tb_logger/*
 wandb/*
 tmp/*
-phototoll-env/
+photo-env/
 version.py
 
 # Byte-compiled / optimized / DLL files
@@ -137,4 +137,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-.vercel
