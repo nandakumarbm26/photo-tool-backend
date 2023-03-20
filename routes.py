@@ -4,26 +4,26 @@ import time
 
 import cv2
 import numpy as np
-from flask import Flask, jsonify, request, send_file
-from flask_cors import CORS
+from flask import Blueprint, jsonify, request, send_file
 from PIL import Image, ImageEnhance
-from rembg import remove
 
-import bgModule
-import utils
+from bgModule import bg_remover
+from utils import calculate_brightness, cropImage, mouth_open, specsdetection
 
-app=Flask(__name__)
-CORS(app)
+# from rembg import remove
 
-@app.route("/",methods=['GET'])
+
+main=Blueprint("main",__name__)
+
+@main.route("/",methods=['GET'])
 def helloWorld():
     return jsonify( {"data":"helloworld"})
 
-@app.route("/download",methods=['GET'])
+@main.route("/download",methods=['GET'])
 def download():
     return send_file(r'..\output.png')
 
-@app.route('/passport',methods=['POST'])
+@main.route('/passport',methods=['POST'])
 def passport():
     try:
         fileName=time.time()
@@ -38,7 +38,7 @@ def passport():
 
         cv2.imwrite("inputCache/"+str(fileName)+".jpg",frame)
         im = Image.fromarray(np.uint8(frame)).convert('RGBA')
-        light=utils.calculate_brightness(im)
+        light=calculate_brightness(im)
         print("check3")
 
         img=frame
@@ -46,18 +46,18 @@ def passport():
         img = cv2.resize(frame, dim, interpolation = cv2.INTER_AREA)
         img=cv2.cvtColor(img,cv2.COLOR_BGR2RGBA)
         data =Image.fromarray(np.uint8(img)).convert('RGBA')
-        data=bgModule.bg_remover(data)
+        data=bg_remover(data)
         img=cv2.cvtColor(np.array(data),cv2.COLOR_RGBA2BGRA)
 
         # dim=(800,int((800/img.shape[1])*img.shape[0]))
         # img = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-        # # img=utils.enhance(img)
+        # # img=enhance(img)
         # print("enhance done")
 
         print("image crop")
         dim=(800,int((800/img.shape[1])*img.shape[0]))
         img = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-        img=utils.cropImage(img)
+        img=cropImage(img)
 
 
 
@@ -79,7 +79,7 @@ def passport():
         # print("image crop")
         # dim=(1600,int((1600/img.shape[1])*img.shape[0]))
         # img = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-        # img=utils.cropImage(img)
+        # img=cropImage(img)
         cv2.imwrite('remove.png',img)
         print("img :",img.shape)
 
@@ -105,8 +105,8 @@ def passport():
         #i=cv2.copyMakeBorder(i, 7, 7, 7, 7, cv2.BORDER_CONSTANT, value=[255, 255, 255])
         # cv2.imwrite('out1.png',i)
         imgCopy=copy.deepcopy(i)
-        specFlag=utils.specsdetection(imgCopy)
-        mouthOpen=utils.mouth_open(imgCopy)
+        specFlag=specsdetection(imgCopy)
+        mouthOpen=mouth_open(imgCopy)
         print(specFlag)
         (flag, encodedImage) = cv2.imencode(".png", i)  # Encode Image
 
@@ -123,5 +123,5 @@ def passport():
 
 
 
-if (__name__=="__main__"):
-    app.run(port="3000")
+# if (__name__=="__main__"):
+#     main.run(port="3000")
